@@ -6,90 +6,100 @@
 <title>Pixelora AI - Photo Enhancer</title>
 
 <style>
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#0b1020;
+color:white;
 }
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0b1020;
-  color: white;
+.container{
+max-width:900px;
+margin:auto;
+padding:45px 20px;
+text-align:center;
 }
 
-.container {
-  max-width: 900px;
-  margin: auto;
-  padding: 60px 20px;
-  text-align: center;
+.logo{
+font-size:34px;
+font-weight:bold;
 }
 
-.logo {
-  font-size: 36px;
-  font-weight: bold;
-  margin-bottom: 10px;
+.subtitle{
+color:#aab2c5;
+margin:12px 0 35px;
 }
 
-.subtitle {
-  color: #aab2c5;
-  font-size: 17px;
-  margin-bottom: 40px;
+.upload-box{
+background:#151c32;
+border:2px dashed #52607a;
+border-radius:22px;
+padding:45px 20px;
+cursor:pointer;
 }
 
-.upload-box {
-  background: #151c32;
-  border: 2px dashed #52607a;
-  border-radius: 22px;
-  padding: 55px 20px;
-  cursor: pointer;
+.upload-box:hover{
+border-color:#7c83ff;
 }
 
-.upload-box:hover {
-  border-color: #8b9cff;
+.icon{
+font-size:50px;
 }
 
-.icon {
-  font-size: 55px;
-  margin-bottom: 15px;
+input{
+display:none;
 }
 
-.upload-box h2 {
-  margin: 10px 0;
+.button{
+display:inline-block;
+margin-top:18px;
+padding:14px 28px;
+background:#6c63ff;
+border-radius:10px;
+font-weight:bold;
+cursor:pointer;
 }
 
-.upload-box p {
-  color: #aab2c5;
+.preview{
+display:none;
+margin-top:35px;
 }
 
-input {
-  display: none;
+.preview img{
+max-width:100%;
+max-height:450px;
+border-radius:15px;
 }
 
-.button {
-  display: inline-block;
-  margin-top: 20px;
-  padding: 14px 30px;
-  background: #6c63ff;
-  color: white;
-  border-radius: 10px;
-  font-weight: bold;
-  cursor: pointer;
+.enhance-btn{
+display:none;
+margin:25px auto 0;
+padding:15px 35px;
+border:0;
+border-radius:10px;
+background:#22c55e;
+color:white;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
 }
 
-.preview {
-  display: none;
-  margin-top: 35px;
+.status{
+margin-top:18px;
+color:#aab2c5;
 }
 
-.preview img {
-  max-width: 100%;
-  max-height: 500px;
-  border-radius: 15px;
-}
-
-.file-name {
-  margin-top: 15px;
-  color: #aab2c5;
+.download-btn{
+display:none;
+margin-top:15px;
+padding:12px 25px;
+background:#2563eb;
+color:white;
+border-radius:10px;
+text-decoration:none;
+font-weight:bold;
 }
 </style>
 </head>
@@ -98,66 +108,134 @@ input {
 
 <div class="container">
 
-  <div class="logo">✨ Pixelora AI</div>
+<div class="logo">✨ Pixelora AI</div>
 
-  <div class="subtitle">
-    Make your photos clearer, sharper and better.
-  </div>
+<div class="subtitle">
+AI Photo Enhancer — Make your photos clearer and sharper.
+</div>
 
-  <label class="upload-box" for="photoInput">
+<label class="upload-box" for="photoInput">
 
-    <div class="icon">📸</div>
+<div class="icon">📸</div>
 
-    <h2>Upload your photo</h2>
+<h2>Upload your photo</h2>
 
-    <p>Select a photo to enhance</p>
+<p>Select a photo to enhance</p>
 
-    <span class="button">Choose Photo</span>
+<span class="button">Choose Photo</span>
 
-  </label>
+</label>
 
-  <input
-    type="file"
-    id="photoInput"
-    accept="image/*"
-  >
+<input type="file" id="photoInput" accept="image/*">
 
-  <div class="preview" id="preview">
+<div class="preview" id="preview">
 
-    <h2>Your Photo</h2>
+<h2>Preview</h2>
 
-    <img id="previewImage" alt="Uploaded photo">
+<img id="previewImage" alt="Uploaded photo">
 
-    <div class="file-name" id="fileName"></div>
+<br>
 
-  </div>
+<button class="enhance-btn" id="enhanceBtn">
+✨ Enhance Photo
+</button>
+
+<div class="status" id="status"></div>
+
+<a class="download-btn" id="downloadBtn" download="pixelora-enhanced.jpg">
+⬇ Download Photo
+</a>
+
+</div>
 
 </div>
 
 <script>
-const photoInput = document.getElementById("photoInput");
-const preview = document.getElementById("preview");
-const previewImage = document.getElementById("previewImage");
-const fileName = document.getElementById("fileName");
 
-photoInput.addEventListener("change", function () {
+const photoInput=document.getElementById("photoInput");
+const preview=document.getElementById("preview");
+const previewImage=document.getElementById("previewImage");
+const enhanceBtn=document.getElementById("enhanceBtn");
+const status=document.getElementById("status");
+const downloadBtn=document.getElementById("downloadBtn");
 
-  const file = this.files[0];
+let selectedImage=null;
 
-  if (!file) return;
+photoInput.addEventListener("change",function(){
 
-  if (!file.type.startsWith("image/")) {
-    alert("Please select an image.");
-    return;
-  }
+const file=this.files[0];
 
-  const imageURL = URL.createObjectURL(file);
+if(!file)return;
 
-  previewImage.src = imageURL;
-  fileName.textContent = file.name;
+if(!file.type.startsWith("image/")){
+alert("Please select an image.");
+return;
+}
 
-  preview.style.display = "block";
+selectedImage=file;
+
+previewImage.src=URL.createObjectURL(file);
+
+preview.style.display="block";
+enhanceBtn.style.display="inline-block";
+status.textContent="";
+downloadBtn.style.display="none";
+
 });
+
+enhanceBtn.addEventListener("click",function(){
+
+if(!selectedImage)return;
+
+status.textContent="✨ Enhancing your photo...";
+
+enhanceBtn.disabled=true;
+
+setTimeout(function(){
+
+const img=new Image();
+
+img.onload=function(){
+
+const canvas=document.createElement("canvas");
+
+const scale=2;
+
+canvas.width=img.width*scale;
+canvas.height=img.height*scale;
+
+const ctx=canvas.getContext("2d");
+
+ctx.imageSmoothingEnabled=true;
+ctx.imageSmoothingQuality="high";
+
+ctx.drawImage(
+img,
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+const result=canvas.toDataURL("image/jpeg",0.95);
+
+previewImage.src=result;
+
+downloadBtn.href=result;
+downloadBtn.style.display="inline-block";
+
+status.textContent="✅ Photo enhanced successfully!";
+
+enhanceBtn.disabled=false;
+
+};
+
+img.src=URL.createObjectURL(selectedImage);
+
+},1000);
+
+});
+
 </script>
 
 </body>
