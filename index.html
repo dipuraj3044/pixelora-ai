@@ -1,12 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pixelora AI - Photo Enhancer</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pixelora AI - Photo Enhancer</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b1020;
+  color: white;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.logo {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: #aab2c5;
+  font-size: 17px;
+  margin-bottom: 40px;
+}
+
+.upload-box {
+  background: #151c32;
+  border: 2px dashed #52607a;
+  border-radius: 22px;
+  padding: 55px 20px;
+  cursor: pointer;
+}
+
+.upload-box:hover {
+  border-color: #8b9cff;
+}
+
+.icon {
+  font-size: 55px;
+  margin-bottom: 15px;
+}
+
+.upload-box h2 {
+  margin: 10px 0;
+}
+
+.upload-box p {
+  color: #aab2c5;
+}
+
+input {
+  display: none;
+}
+
+.button {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 14px 30px;
+  background: #6c63ff;
+  color: white;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.preview {
+  display: none;
+  margin-top: 35px;
+}
+
+.preview img {
+  max-width: 100%;
+  max-height: 500px;
+  border-radius: 15px;
+}
+
+.file-name {
+  margin-top: 15px;
+  color: #aab2c5;
+}
+</style>
 </head>
+
 <body>
-  <h1>Pixelora AI</h1>
-  <p>AI Photo Enhancer</p>
+
+<div class="container">
+
+  <div class="logo">✨ Pixelora AI</div>
+
+  <div class="subtitle">
+    Make your photos clearer, sharper and better.
+  </div>
+
+  <label class="upload-box" for="photoInput">
+
+    <div class="icon">📸</div>
+
+    <h2>Upload your photo</h2>
+
+    <p>Select a photo to enhance</p>
+
+    <span class="button">Choose Photo</span>
+
+  </label>
+
+  <input
+    type="file"
+    id="photoInput"
+    accept="image/*"
+  >
+
+  <div class="preview" id="preview">
+
+    <h2>Your Photo</h2>
+
+    <img id="previewImage" alt="Uploaded photo">
+
+    <div class="file-name" id="fileName"></div>
+
+  </div>
+
+</div>
+
+<script>
+const photoInput = document.getElementById("photoInput");
+const preview = document.getElementById("preview");
+const previewImage = document.getElementById("previewImage");
+const fileName = document.getElementById("fileName");
+
+photoInput.addEventListener("change", function () {
+
+  const file = this.files[0];
+
+  if (!file) return;
+
+  if (!file.type.startsWith("image/")) {
+    alert("Please select an image.");
+    return;
+  }
+
+  const imageURL = URL.createObjectURL(file);
+
+  previewImage.src = imageURL;
+  fileName.textContent = file.name;
+
+  preview.style.display = "block";
+});
+</script>
+
 </body>
 </html>
